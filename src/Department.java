@@ -1,2 +1,4 @@
-abstract public class Department {
+import java.util.Observable;
+
+abstract public class Department extends Observable implements Subject {
 }
