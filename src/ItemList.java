@@ -2,31 +2,70 @@ import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-abstract class ItemList<Item> implements Iterable<Item> {
+abstract class ItemList {
     public Node after;
     public Node before;
     public int size;
+    Comparator c;
 
-    //    public ItemList(){
-//        before = new Node();
-//        after = new Node();
-//        before.next = after;
-//        after.prev = before;
-//    }
+    public ItemList(Comparator c) {
+        this.c = c;
+    }
+
     public boolean isEmpty() {
         if (size == 0) return true;
         return false;
     }
 
-    public class Node {
-        Item item;
-        Node next;
-        Node prev;
+    public Node<Item> getNode(int index) {
+        Node<Item> aux = before;
+        int i = 0;
+        while (aux != after) {
+            i++;
+            if (i == index) return aux;
+            aux = aux.next;
+        }
+        return null;
+    }
+
+    public abstract boolean add(Item element);
+
+    public Item getItem(int index) {
+        for (ListIterator<Item> it = listIterator(); it.hasNext(); ) {
+            if (it.nextIndex() == index) return it.next();
+        }
+        return null;
+    }
+
+    public ListIterator<Item> listIterator() {
+        return new ItemIterator();
+    }
+
+    public static class Node<Item> {
+        private Item item;
+        private Node<Item> next;
+        private Node<Item> prev;
+
+        public Node() {
+            item = null;
+            next = null;
+            prev = null;
+        }
+
+        public Node(Item item) {
+            this.item = item;
+        }
+
+        public Node(Item item, Node<Item> next, Node<Item> prev) {
+            this.item = item;
+            this.next = next;
+            this.prev = prev;
+        }
     }
 
     public class ItemIterator implements ListIterator<Item> {
-        private Node current = before.next;
-        private Node last = null;
+        private Node<Item> current = before.next;//nodul curent
+        private Node<Item> last = null; //ultimul nod accesat de metoda next() sau previous()
         private int index = 0;
 
         public boolean hasNext() {
@@ -68,31 +107,17 @@ abstract class ItemList<Item> implements Iterable<Item> {
 
         @Override
         public void remove() {
-            if (last != null) {
-                Node aux1 = last.prev;
-                Node aux2 = last.next;
-                aux1.next = aux2;
-                aux2.prev = aux1;
-                size--;
-                if (current == last)
-                    current = aux2;
-                else
-                    index--;
-                last = null;
-
-            }
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void set(Item item) {
-            if (last != null) {
-                last.item = item;
-            }
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void add(Item item) {
-
+            throw new UnsupportedOperationException();
         }
     }
 

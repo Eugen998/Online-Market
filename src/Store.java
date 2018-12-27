@@ -1,18 +1,19 @@
+import java.util.Iterator;
 import java.util.Vector;
 
 public class Store {
     private static Store s = null;
     public String name;
-    public Vector<Customer> Customers;
-    public Vector<Department> Departments;
+    public Vector<Customer> customers;
+    public Vector<Department> departments;
 
     public Store() {
     }
 
     public Store(String name) {
         this.name = name;
-        Customers = null;
-        Departments = null;
+        customers = null;
+        departments = null;
     }
 
     public static Store getInstance() {
@@ -22,11 +23,11 @@ public class Store {
     }
 
     public void enter(Customer c) {
-        Customers.add(c);
+        customers.add(c);
     }
 
     public void exit(Customer c) {
-        Customers.remove(c);
+        customers.remove(c);
     }
 
     public ShoppingCart getShoppingCart(Double b) {
@@ -35,19 +36,21 @@ public class Store {
     }
 
     public Vector<Customer> getCustomers() {
-        return Customers;
+        return customers;
     }
 
     public Vector<Department> getDepartments() {
-        return Departments;
+        return departments;
     }
 
     public void addDepartment(Department d) {
-        Departments.add(d);
+        departments.add(d);
     }
 
     public Department getDepartment(Integer id) {
-        //to do
+        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
+            if (it.next().getId() == id) return it.next();
+        }
         return null;
     }
 }
