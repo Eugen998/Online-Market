@@ -3,8 +3,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 abstract class ItemList {
-    public Node after;
-    public Node before;
+    public Node head;
     public int size;
     Comparator c;
 
@@ -18,29 +17,82 @@ abstract class ItemList {
     }
 
     public Node<Item> getNode(int index) {
-        Node<Item> aux = before;
+        Node<Item> aux = head;
         int i = 0;
-        while (aux != after) {
-            i++;
-            if (i == index) return aux;
-            aux = aux.next;
+        while (i <= index) {
+            if (aux.next == null) {
+                if (i == index) return aux;
+                return null;
+            } else {
+                aux = aux.next;
+                i++;
+            }
         }
-        return null;
+        return aux;
     }
 
     public abstract boolean add(Item element);
 
+    public abstract Item remove(int index);
     public Item getItem(int index) {
-        for (ListIterator<Item> it = listIterator(); it.hasNext(); ) {
+        for (ListIterator<Item> it = this.listIterator(); it.hasNext(); ) {
             if (it.nextIndex() == index) return it.next();
         }
         return null;
+    }
+
+    public int indexOf(Item item) {
+        for (ListIterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next() == item) return it.nextIndex();
+        }
+        throw new NoSuchElementException();
+    }
+
+    public int indexOf(Node<Item> node) {
+        Node<Item> aux = head;
+        int index = 0;
+        while (aux != null) {
+            if (aux == node) return index;
+            index++;
+            aux = aux.next;
+        }
+        throw new NoSuchElementException();
+    }
+
+    public boolean contains(Node<Item> node) {
+        Node<Item> aux = head;
+        while (aux != null) {
+            if (aux == node) return true;
+            aux = aux.next;
+        }
+        return false;
+    }
+
+    public boolean contains(Item item) {
+        for (ListIterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next() == item) return true;
+        }
+        return false;
+    }
+
+
+    public double getTotalPrice() {
+        double s = 0;
+        for (ListIterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            s = s + it.next().getPrice();
+        }
+        return s;
     }
 
     public ListIterator<Item> listIterator() {
         return new ItemIterator();
     }
 
+    public ListIterator<Item> listIterator(int index) {
+        ListIterator a = new ItemIterator();
+        ((ItemIterator) a).setIndex(index);
+        return a;
+    }
     public static class Node<Item> {
         private Item item;
         private Node<Item> next;
@@ -64,10 +116,13 @@ abstract class ItemList {
     }
 
     public class ItemIterator implements ListIterator<Item> {
-        private Node<Item> current = before.next;//nodul curent
+        private Node<Item> current = head.next;//nodul curent
         private Node<Item> last = null; //ultimul nod accesat de metoda next() sau previous()
         private int index = 0;
 
+        public void setIndex(int index) {
+            this.index = index;
+        }
         public boolean hasNext() {
             return index < size;
         }
