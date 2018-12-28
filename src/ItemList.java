@@ -1,11 +1,12 @@
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 abstract class ItemList {
-    public Node head;
+    public Node<Item> head;
     public int size;
-    Comparator c;
+    Comparator<Item> c;
 
     public ItemList(Comparator c) {
         this.c = c;
@@ -33,7 +34,12 @@ abstract class ItemList {
 
     public abstract boolean add(Item element);
 
+    public abstract boolean addAll(Collection<? extends Item> c);
+
     public abstract Item remove(int index);
+
+    public abstract boolean removeAll(Collection<? extends Item> c);
+
     public Item getItem(int index) {
         for (ListIterator<Item> it = this.listIterator(); it.hasNext(); ) {
             if (it.nextIndex() == index) return it.next();
@@ -93,6 +99,7 @@ abstract class ItemList {
         ((ItemIterator) a).setIndex(index);
         return a;
     }
+
     public static class Node<Item> {
         private Item item;
         private Node<Item> next;
@@ -106,6 +113,32 @@ abstract class ItemList {
 
         public Node(Item item) {
             this.item = item;
+            next = null;
+            prev = null;
+        }
+
+        public Item getItem() {
+            return item;
+        }
+
+        public void setItem(Item item) {
+            this.item = item;
+        }
+
+        public Node<Item> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<Item> next) {
+            this.next = next;
+        }
+
+        public Node<Item> getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Node<Item> prev) {
+            this.prev = prev;
         }
 
         public Node(Item item, Node<Item> next, Node<Item> prev) {
@@ -123,6 +156,7 @@ abstract class ItemList {
         public void setIndex(int index) {
             this.index = index;
         }
+
         public boolean hasNext() {
             return index < size;
         }
