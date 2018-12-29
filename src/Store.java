@@ -7,13 +7,10 @@ public class Store {
     public Vector<Customer> customers;
     public Vector<Department> departments;
 
-    public Store() {
-    }
-
-    public Store(String name) {
-        this.name = name;
-        customers = null;
-        departments = null;
+    private Store() {
+        name = new String();
+        customers = new Vector<Customer>();
+        departments = new Vector<Department>();
     }
 
     public static Store getInstance() {
@@ -31,8 +28,7 @@ public class Store {
     }
 
     public ShoppingCart getShoppingCart(Double b) {
-        //to do
-        return null;
+        return new ShoppingCart(b);
     }
 
     public Vector<Customer> getCustomers() {
@@ -53,4 +49,33 @@ public class Store {
         }
         return null;
     }
+
+    public Department getBookDepartment() {
+        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
+            if (it.next() instanceof BookDepartment) return it.next();
+        }
+        return null;
+    }
+
+    public Department getMusicDepartment() {
+        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
+            if (it.next() instanceof MusicDepartment) return it.next();
+        }
+        return null;
+    }
+
+    public Department getSoftwareDepartment() {
+        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
+            if (it.next() instanceof SoftwareDepartment) return it.next();
+        }
+        return null;
+    }
+
+    public Department getVideoDepartment() {
+        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
+            if (it.next() instanceof VideoDepartment) return it.next();
+        }
+        return null;
+    }
+
 }

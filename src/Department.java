@@ -14,8 +14,8 @@ abstract public class Department extends Observable implements Subject {
     public Department(int id, String name) {
         this.id = id;
         this.name = name;
-        items = null;
-        customers = null;
+        items = new Vector<Item>();
+        customers = new Vector<Customer>();
     }
 
     public void enter(Customer c) {

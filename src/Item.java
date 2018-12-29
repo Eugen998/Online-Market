@@ -2,6 +2,7 @@ public class Item {
     private String name;
     private int id;
     private double price;
+    private String department;
 
     public String getName() {
         return name;
@@ -25,5 +26,13 @@ public class Item {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }
