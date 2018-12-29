@@ -3,7 +3,7 @@ import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-abstract class ItemList {
+public abstract class ItemList {
     public Node<Item> head;
     public int size;
     Comparator<Item> c;
@@ -149,9 +149,9 @@ abstract class ItemList {
     }
 
     public class ItemIterator implements ListIterator<Item> {
-        private Node<Item> current = head.next;//nodul curent
-        private Node<Item> last = null; //ultimul nod accesat de metoda next() sau previous()
-        private int index = 0;
+        public Node<Item> current = head;//nodul curent
+        public Node<Item> last = null; //ultimul nod accesat de metoda next() sau previous()
+        public int index = 0;
 
         public void setIndex(int index) {
             this.index = index;

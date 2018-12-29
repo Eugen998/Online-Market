@@ -1,5 +1,7 @@
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 public class ShoppingCart extends ItemList implements Visitor {
     public double buget;
@@ -15,9 +17,11 @@ public class ShoppingCart extends ItemList implements Visitor {
 
     @Override
     public boolean add(Item element) {
+        if (buget < element.getPrice()) return false;
         if (isEmpty()) {  //daca lista este goala
             head = new Node(element);
             size++;
+            buget = buget - element.getPrice();
             return true;
         }
         if (c.compare(element, head.getItem()) < 0) {    //daca trebuie adaugat inaintea primului element
@@ -27,6 +31,7 @@ public class ShoppingCart extends ItemList implements Visitor {
             head.setNext(aux);
             aux.setPrev(head);
             size++;
+            buget = buget - element.getPrice();
             return true;
         }
         Node<Item> aux1 = head;
@@ -37,6 +42,7 @@ public class ShoppingCart extends ItemList implements Visitor {
                 head.setNext(ins);
                 ins.setPrev(head);
                 size++;
+                buget = buget - element.getPrice();
                 return true;
             }
         }
@@ -46,6 +52,7 @@ public class ShoppingCart extends ItemList implements Visitor {
                 aux1.setNext(ins);
                 aux2.setPrev(ins);
                 size++;
+                buget = buget - element.getPrice();
                 return true;
             }
             aux1 = aux2;
@@ -56,16 +63,50 @@ public class ShoppingCart extends ItemList implements Visitor {
 
     @Override
     public boolean addAll(Collection<? extends Item> c) {
-        return false;
+        if (c.isEmpty()) return false;
+        for (Iterator<? extends Item> it = c.iterator(); it.hasNext(); ) {
+            add(it.next());
+        }
+        return true;
     }
 
     @Override
     public Item remove(int index) {
-        return null;
+        if (isEmpty()) return null;
+        if (size == 1) {
+            if (index == 0) {
+                Node<Item> aux = head;
+                head = null;
+                size = 0;
+                buget = buget + aux.getItem().getPrice();
+                return aux.getItem();
+            }
+            throw new NoSuchElementException();
+        }
+        if (index == 0) {
+            Node<Item> aux = head;
+            head = head.getNext();
+            size--;
+            buget = buget + aux.getItem().getPrice();
+            return aux.getItem();
+
+        }
+        Node<Item> aux = getNode(index);
+        aux.getPrev().setNext(aux.getNext());
+        aux.getNext().setPrev(aux.getPrev());
+        size--;
+        buget = buget + aux.getItem().getPrice();
+        return aux.getItem();
+
+
     }
 
     @Override
     public boolean removeAll(Collection<? extends Item> c) {
-        return false;
+        if (c.isEmpty()) return false;
+        for (Iterator<? extends Item> it = c.iterator(); it.hasNext(); ) {
+            remove(indexOf(it.next()));
+        }
+        return true;
     }
 }
