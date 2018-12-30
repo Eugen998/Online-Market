@@ -7,7 +7,6 @@ abstract public class Department extends Observable implements Subject {
     public String name;
     public Vector<Item> items;
     public Vector<Customer> customers;
-
     public Department() {
     }
 
