@@ -3,10 +3,11 @@ import java.util.Observer;
 import java.util.Vector;
 
 abstract public class Department extends Observable implements Subject {
-    public int id;
-    public String name;
-    public Vector<Item> items;
-    public Vector<Customer> customers;
+    private int id;
+    private String name;
+    private Vector<Item> items;
+    private Vector<Customer> customers;
+
     public Department() {
     }
 
@@ -15,6 +16,22 @@ abstract public class Department extends Observable implements Subject {
         this.name = name;
         items = new Vector<Item>();
         customers = new Vector<Customer>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void enter(Customer c) {
@@ -28,10 +45,6 @@ abstract public class Department extends Observable implements Subject {
 
     public Vector<Customer> getCustomers() {
         return customers;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public Vector<Item> getItems() {
@@ -52,6 +65,10 @@ abstract public class Department extends Observable implements Subject {
 
     public void notifyAllObservers(Notification notification) {
         //to do
+    }
+
+    public String toString() {
+        return "{ " + name + " " + id + " }";
     }
 
     public abstract void accept(ShoppingCart shoppingCart);

@@ -35,4 +35,8 @@ public class Item {
     public void setDepartment(String department) {
         this.department = department;
     }
+
+    public String toString() {
+        return "[ nume: " + name + " id: " + id + " pret: " + price + " departament: " + department + " ]";
+    }
 }

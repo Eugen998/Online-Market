@@ -13,4 +13,8 @@ public class Customer implements Observer {
     public void update(Observable o, Object arg) {
 
     }
+
+    public String toString() {
+        return "{ " + name + " , buget: " + shoppingCart.buget + " }";
+    }
 }

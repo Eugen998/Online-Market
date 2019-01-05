@@ -43,37 +43,22 @@ public class Store {
         departments.add(d);
     }
 
-    public Department getDepartment(Integer id) {
+    public Department getDepartment(int id) {
         for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
-            if (it.next().getId() == id) return it.next();
+            Department d = it.next();
+            int comp = d.getId();
+            if (comp == id) return d;
         }
         return null;
     }
 
-    public Department getBookDepartment() {
-        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof BookDepartment) return it.next();
-        }
-        return null;
-    }
-
-    public Department getMusicDepartment() {
-        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof MusicDepartment) return it.next();
-        }
-        return null;
-    }
-
-    public Department getSoftwareDepartment() {
-        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof SoftwareDepartment) return it.next();
-        }
-        return null;
-    }
-
-    public Department getVideoDepartment() {
-        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof VideoDepartment) return it.next();
+    public Item getItem(int id) {
+        for (Iterator<Department> it = Store.getInstance().getDepartments().iterator(); it.hasNext(); ) {
+            Department aux = it.next();
+            for (Iterator<Item> iter = aux.getItems().iterator(); iter.hasNext(); ) {
+                Item i = iter.next();
+                if (i.getId() == id) return i;
+            }
         }
         return null;
     }
