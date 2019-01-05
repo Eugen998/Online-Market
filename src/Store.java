@@ -1,3 +1,4 @@
+import java.util.Currency;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -33,6 +34,14 @@ public class Store {
 
     public Vector<Customer> getCustomers() {
         return customers;
+    }
+
+    public Customer getCustomer(String name) {
+        for (Iterator<Customer> it = customers.iterator(); it.hasNext(); ) {
+            Customer ret = it.next();
+            if (ret.name.equals(name)) return ret;
+        }
+        return null;
     }
 
     public Vector<Department> getDepartments() {

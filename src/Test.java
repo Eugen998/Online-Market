@@ -1,17 +1,22 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.SplittableRandom;
 
 public class Test {
-    public static void main(String args[]) throws FileNotFoundException {
-        File file = new File(args[0]);
+    public static void main(String args[]) throws IOException {
+        String s1 = args[0] + "/store.txt";
+        String s2 = args[0] + "/customers.txt";
+        String s3 = args[0] + "/events.txt";
+        String s4 = args[0] + "/output.txt";
+        FileWriter f = new FileWriter(s4);
+        PrintWriter writer = new PrintWriter(f);
+        File file = new File(s1);
         Scanner sc = new Scanner(file);
         String s = sc.nextLine();
         int id;
         Store.getInstance().name = s;
-        System.out.println("Am creat magazinul " + Store.getInstance().name);
+        writer.println("Am creat magazinul " + Store.getInstance().name);
         while (sc.hasNextLine()) {
             s = sc.nextLine();
             Scanner r = new Scanner(s);
@@ -29,7 +34,7 @@ public class Test {
             }
             s = sc.nextLine();
             int nr = Integer.parseInt(s);
-            System.out.println(nr + " produse");
+            writer.println(nr + " produse");
             while (nr > 0) {
                 s = sc.nextLine();
                 r = new Scanner(s);
@@ -42,13 +47,13 @@ public class Test {
                 Store.getInstance().getDepartment(id).addItem(a);
                 nr--;
             }
-            System.out.println(Store.getInstance().getDepartment(id));
-            System.out.println(Store.getInstance().getDepartment(id).getItems());
+            writer.println(Store.getInstance().getDepartment(id));
+            writer.println(Store.getInstance().getDepartment(id).getItems());
         }
-        file = new File(args[1]);
+        file = new File(s2);
         sc = new Scanner(file);
         int nr = Integer.parseInt(sc.nextLine());
-        System.out.println(nr + " clienti");
+        writer.println(nr + " clienti");
         Scanner r;
         while (nr > 0) {
             s = sc.nextLine();
@@ -60,38 +65,69 @@ public class Test {
             Store.getInstance().enter(c);
             nr--;
         }
-        System.out.println(Store.getInstance().getCustomers());
-        file = new File(args[2]);
+        writer.println(Store.getInstance().getCustomers());
+        file = new File(s3);
         sc = new Scanner(file);
         nr = Integer.parseInt(sc.nextLine());
-        System.out.println(nr + " evenimente");
+        writer.println(nr + " evenimente");
         while (nr > 0) {
             s = sc.nextLine();
             r = new Scanner(s);
             r.useDelimiter(";");
             String event = r.next();
             if (event.equals("addItem")) {
-                System.out.println("adaugare elem");
+                Item adaug = Store.getInstance().getItem(r.nextInt());
+                writer.println("Se adauga itemul " + adaug);
+                String where = r.next();
+                if (where.equals("ShoppingCart")) {
+                    String n = r.next();
+                    Customer c = Store.getInstance().getCustomer(n);
+                    writer.println("In sc la clientul" + c);
+                    //c.shoppingCart.add(adaug);
+                } else if (where.equals("WishList")) {
+                    String n = r.next();
+                    Customer c = Store.getInstance().getCustomer(n);
+                    writer.println("In wl la clientul" + c);
+                    //c.wishList.add(adaug);
+                }
             } else if (event.equals("delItem")) {
-                System.out.println("stergere element");
+                Item sterg = Store.getInstance().getItem(r.nextInt());
+                writer.println("Se sterge itemul " + sterg);
+                String where = r.next();
+                if (where.equals("ShoppingCart")) {
+                    String n = r.next();
+                    Customer c = Store.getInstance().getCustomer(n);
+                    int ind = c.shoppingCart.indexOf(sterg);
+                    writer.println("Din sc de la clientul " + c);
+                    writer.println("indicele " + ind);
+                    //c.shoppingCart.remove(ind);
+                } else if (where.equals("WishList")) {
+                    String n = r.next();
+                    Customer c = Store.getInstance().getCustomer(n);
+                    int ind = c.wishList.indexOf(sterg);
+                    writer.println("Din wl de la clientul " + c);
+                    writer.println("indicele " + ind);
+                    //c.wishList.remove(ind);
+                }
             } else if (event.equals("addProduct")) {
-                System.out.println("adaugare produs");
+                writer.println("adaugare produs");
             } else if (event.equals("modifyProduct")) {
-                System.out.println("modificare produs");
+                writer.println("modificare produs");
             } else if (event.equals("delProduct")) {
-                System.out.println("stergere produs");
+                writer.println("stergere produs");
             } else if (event.equals("getItem")) {
-                System.out.println(" strategie ");
+                writer.println(" strategie ");
             } else if (event.equals("getTotal")) {
-                System.out.println("produsele din lista clientului");
+                writer.println("produsele din lista clientului");
             } else if (event.equals("accept")) {
-                System.out.println("accept");
+                writer.println("accept");
             } else if (event.equals("getObservers")) {
-                System.out.println(" get observers ");
+                writer.println(" get observers ");
             } else if (event.equals("getNotifications")) {
-                System.out.println("get notif");
+                writer.println("get notif");
             }
             nr--;
         }
+        writer.close();
     }
 }
