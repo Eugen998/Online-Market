@@ -83,12 +83,17 @@ public class Test {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     writer.println("In sc la clientul" + c);
-                    //c.shoppingCart.add(adaug);
+                    c.shoppingCart.add(adaug);
+                    writer.println("SC lui " + c.name + " contine elementul " + adaug + " : " + c.shoppingCart.contains(adaug));
+                    writer.println("Pretul total din sc lui " + c.name + " este " + c.shoppingCart.getTotalPrice());
+                    writer.println("Bugetul clientului " + c.name + " este " + c.shoppingCart.buget);
                 } else if (where.equals("WishList")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     writer.println("In wl la clientul" + c);
-                    //c.wishList.add(adaug);
+                    c.wishList.add(adaug);
+                    writer.println("WL lui " + c.name + " contine elementul " + adaug + " : " + c.wishList.contains(adaug));
+                    writer.println("Pretul total din wl lui " + c.name + " este " + c.wishList.getTotalPrice());
                 }
             } else if (event.equals("delItem")) {
                 Item sterg = Store.getInstance().getItem(r.nextInt());

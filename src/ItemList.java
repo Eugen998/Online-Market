@@ -9,6 +9,8 @@ public abstract class ItemList {
     Comparator<Item> c;
 
     public ItemList(Comparator c) {
+        head = new Node();
+        size = 0;
         this.c = c;
     }
 
@@ -117,6 +119,12 @@ public abstract class ItemList {
             prev = null;
         }
 
+        public Node(Item item, Node<Item> next, Node<Item> prev) {
+            this.item = item;
+            this.next = next;
+            this.prev = prev;
+        }
+
         public Item getItem() {
             return item;
         }
@@ -141,11 +149,6 @@ public abstract class ItemList {
             this.prev = prev;
         }
 
-        public Node(Item item, Node<Item> next, Node<Item> prev) {
-            this.item = item;
-            this.next = next;
-            this.prev = prev;
-        }
     }
 
     public class ItemIterator implements ListIterator<Item> {
