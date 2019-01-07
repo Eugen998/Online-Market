@@ -71,6 +71,6 @@ abstract public class Department extends Observable implements Subject {
         return "{ " + name + " " + id + " }";
     }
 
-    public abstract void accept(ShoppingCart shoppingCart);
+    public abstract void accept(Visitor visitor);
 
 }

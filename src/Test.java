@@ -91,7 +91,7 @@ public class Test {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     writer.println("In wl la clientul" + c);
-                    c.wishList.add(adaug);
+                    //c.wishList.add(adaug);
                     writer.println("WL lui " + c.name + " contine elementul " + adaug + " : " + c.wishList.contains(adaug));
                     writer.println("Pretul total din wl lui " + c.name + " este " + c.wishList.getTotalPrice());
                 }

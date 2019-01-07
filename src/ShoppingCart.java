@@ -17,96 +17,91 @@ public class ShoppingCart extends ItemList implements Visitor {
 
     @Override
     public boolean add(Item element) {
-        if (buget < element.getPrice()) return false;
-        if (isEmpty()) {  //daca lista este goala
-            head = new Node(element);
-            size++;
-            buget = buget - element.getPrice();
+        if (buget > element.getPrice()) {
+            super.add(element);
             return true;
-        }
-        if (c.compare(element, head.getItem()) < 0) {    //daca trebuie adaugat inaintea primului element
-            Node<Item> ins = new Node(element);
-            Node<Item> aux = head;
-            head = ins;
-            head.setNext(aux);
-            aux.setPrev(head);
-            size++;
-            buget = buget - element.getPrice();
-            return true;
-        }
-        Node<Item> aux1 = head;
-        Node<Item> aux2 = head.getNext();
-        if (aux2 == null) {
-            if (c.compare(element, aux1.getItem()) > 0) {
-                Node<Item> ins = new Node(element);
-                head.setNext(ins);
-                ins.setPrev(head);
-                size++;
-                buget = buget - element.getPrice();
-                return true;
-            }
-        }
-        while (aux2 != null) {
-            if (c.compare(element, aux1.getItem()) > 0 && c.compare(element, aux2.getItem()) < 0) {
-                Node<Item> ins = new Node(element, aux2, aux1);
-                aux1.setNext(ins);
-                aux2.setPrev(ins);
-                size++;
-                buget = buget - element.getPrice();
-                return true;
-            }
-            aux1 = aux2;
-            aux2 = aux2.getNext();
         }
         return false;
     }
 
-    @Override
-    public boolean addAll(Collection<? extends Item> c) {
-        if (c.isEmpty()) return false;
-        for (Iterator<? extends Item> it = c.iterator(); it.hasNext(); ) {
-            add(it.next());
-        }
-        return true;
-    }
+//    @Override
+//    public boolean addAll(Collection<? extends Item> c) {
+//        return super.addAll(c);
+//    }
 
     @Override
     public Item remove(int index) {
-        if (isEmpty()) return null;
-        if (size == 1) {
-            if (index == 0) {
-                Node<Item> aux = head;
-                head = null;
-                size = 0;
-                buget = buget + aux.getItem().getPrice();
-                return aux.getItem();
+        Item aux = super.remove(index);
+        if (aux != null) {
+            buget = buget + aux.getPrice();
+            return aux;
+        }
+        return null;
+    }
+
+//    @Override
+//    public boolean removeAll(Collection<? extends Item> c) {
+//        return super.removeAll(c);
+//    }
+
+    public void visit(BookDepartment bookDepartment) {
+        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next().getDepartment().equals("book")) {
+                double newPrice = (0.9) * it.next().getPrice();
+                it.next().setPrice(newPrice);
             }
-            throw new NoSuchElementException();
         }
-        if (index == 0) {
-            Node<Item> aux = head;
-            head = head.getNext();
-            size--;
-            buget = buget + aux.getItem().getPrice();
-            return aux.getItem();
+    }
 
+    public void visit(MusicDepartment musicDepartment) {
+        double s = 0;
+        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next().getDepartment().equals("music")) {
+                s = s + it.next().getPrice();
+            }
         }
-        Node<Item> aux = getNode(index);
-        aux.getPrev().setNext(aux.getNext());
-        aux.getNext().setPrev(aux.getPrev());
-        size--;
-        buget = buget + aux.getItem().getPrice();
-        return aux.getItem();
+        buget = buget + (0.1) * s;
+    }
 
+    public void visit(SoftwareDepartment softwareDepartment) {
+        double newPrice;
+        double min = getItem(0).getPrice();
+        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next().getPrice() < min) min = it.next().getPrice();
+        }
+        if (buget < min) {
+            for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+                if (it.next().getDepartment().equals("software")) {
+                    newPrice = (0.8) * it.next().getPrice();
+                    it.next().setPrice(newPrice);
+                }
+            }
+        }
+    }
+
+    public void visit(VideoDepartment videoDepartment) {
+        double max = 0;
+        double s = 0;
+        double newPrice;
+        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next().getPrice() > max) max = it.next().getPrice();
+        }
+        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+            if (it.next().getDepartment().equals("video")) {
+                s = s + it.next().getPrice();
+            }
+        }
+        buget = buget + (0.05) * s;
+        if (s > max) {
+            for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
+                if (it.next().getDepartment().equals("video")) {
+                    newPrice = (0.85) * it.next().getPrice();
+                    it.next().setPrice(newPrice);
+                }
+            }
+        }
 
     }
 
-    @Override
-    public boolean removeAll(Collection<? extends Item> c) {
-        if (c.isEmpty()) return false;
-        for (Iterator<? extends Item> it = c.iterator(); it.hasNext(); ) {
-            remove(indexOf(it.next()));
-        }
-        return true;
-    }
+
 }
