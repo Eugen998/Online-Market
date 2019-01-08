@@ -5,10 +5,10 @@ import java.util.SplittableRandom;
 
 public class Test {
     public static void main(String args[]) throws IOException {
-        String s1 = args[0] + "/store.txt";
-        String s2 = args[0] + "/customers.txt";
-        String s3 = args[0] + "/events.txt";
-        String s4 = args[0] + "/output.txt";
+        String s1 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\store.txt";
+        String s2 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\customers.txt";
+        String s3 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\events.txt";
+        String s4 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\output.txt";
         FileWriter f = new FileWriter(s4);
         PrintWriter writer = new PrintWriter(f);
         File file = new File(s1);
@@ -62,6 +62,7 @@ public class Test {
             Customer c = new Customer();
             c.name = r.next();
             c.shoppingCart = Store.getInstance().getShoppingCart(r.nextDouble());
+            c.wishList = new WishList();
             Store.getInstance().enter(c);
             nr--;
         }
@@ -91,7 +92,7 @@ public class Test {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     writer.println("In wl la clientul" + c);
-                    //c.wishList.add(adaug);
+                    c.wishList.add(adaug);
                     writer.println("WL lui " + c.name + " contine elementul " + adaug + " : " + c.wishList.contains(adaug));
                     writer.println("Pretul total din wl lui " + c.name + " este " + c.wishList.getTotalPrice());
                 }
@@ -105,14 +106,16 @@ public class Test {
                     int ind = c.shoppingCart.indexOf(sterg);
                     writer.println("Din sc de la clientul " + c);
                     writer.println("indicele " + ind);
-                    //c.shoppingCart.remove(ind);
+                    c.shoppingCart.remove(ind);
+                    writer.println("Bugetul clientului " + c.name + " este " + c.shoppingCart.buget);
                 } else if (where.equals("WishList")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     int ind = c.wishList.indexOf(sterg);
                     writer.println("Din wl de la clientul " + c);
                     writer.println("indicele " + ind);
-                    //c.wishList.remove(ind);
+                    c.wishList.remove(ind);
+                    writer.println("Pretul total din wl lui " + c.name + " este " + c.wishList.getTotalPrice());
                 }
             } else if (event.equals("addProduct")) {
                 writer.println("adaugare produs");

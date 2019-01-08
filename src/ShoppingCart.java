@@ -7,11 +7,11 @@ public class ShoppingCart extends ItemList implements Visitor {
     public double buget;
 
     public ShoppingCart() {
-        super(new SCComparator());
+        super();
     }
 
     public ShoppingCart(double buget) {
-        super(new SCComparator());
+        super();
         this.buget = buget;
     }
 
@@ -19,15 +19,16 @@ public class ShoppingCart extends ItemList implements Visitor {
     public boolean add(Item element) {
         if (buget > element.getPrice()) {
             super.add(element);
+            buget = buget - element.getPrice();
             return true;
         }
         return false;
     }
 
-//    @Override
-//    public boolean addAll(Collection<? extends Item> c) {
-//        return super.addAll(c);
-//    }
+    @Override
+    public boolean addAll(Collection<? extends Item> c) {
+        return true;
+    }
 
     @Override
     public Item remove(int index) {
@@ -39,10 +40,10 @@ public class ShoppingCart extends ItemList implements Visitor {
         return null;
     }
 
-//    @Override
-//    public boolean removeAll(Collection<? extends Item> c) {
-//        return super.removeAll(c);
-//    }
+    @Override
+    public boolean removeAll(Collection<? extends Item> c) {
+        return true;
+    }
 
     public void visit(BookDepartment bookDepartment) {
         for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
