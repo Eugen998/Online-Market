@@ -38,7 +38,6 @@ public abstract class ItemList {
             size++;
             return true;
         } else if (size == 1) {
-
             if (c.compare(element, head.item) <= 0) {
                 aux.next = head;
                 head.prev = aux;
@@ -51,19 +50,32 @@ public abstract class ItemList {
             return true;
         } else {
             Node<Item> aux1 = head;
-            Node<Item> aux2 = head.next;
-            while (aux2 != null) {
-                if (c.compare(element, aux1.item) > 0 && c.compare(element, aux2.item) < 0) {
-                    aux1.next = aux;
-                    aux2.prev = aux;
-                    aux.prev = aux1;
-                    aux.next = aux2;
+            if (c.compare(element, aux1.item) <= 0) {
+                aux.next = aux1;
+                aux1.prev = aux;
+                head = aux;
+                size++;
+                return true;
+            }
+            while (aux1.next != null) {
+                if (c.compare(element, aux1.item) < 0) {
+                    aux1.prev.next = aux;
+                    aux.prev = aux1.prev;
+                    aux1.prev = aux;
+                    aux.next = aux1;
                     size++;
                     return true;
                 } else {
-                    aux1 = aux2;
-                    aux2 = aux2.next;
+                    aux1 = aux1.next;
                 }
+            }
+            if (c.compare(element, aux1.item) <= 0) {
+                aux1.prev.next = aux;
+                aux.prev = aux1.prev;
+                aux1.prev = aux;
+                aux.next = aux1;
+                size++;
+                return true;
             }
             aux1.next = aux;
             aux.prev = aux1;
@@ -199,6 +211,14 @@ public abstract class ItemList {
             this.prev = prev;
         }
 
+    }
+
+    public String toString() {
+        String s = "";
+        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+            s = s + it.next() + "\n";
+        }
+        return s;
     }
 
     public class ItemIterator implements ListIterator<Item> {

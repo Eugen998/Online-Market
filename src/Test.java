@@ -70,7 +70,6 @@ public class Test {
         file = new File(s3);
         sc = new Scanner(file);
         nr = Integer.parseInt(sc.nextLine());
-        writer.println(nr + " evenimente");
         while (nr > 0) {
             s = sc.nextLine();
             r = new Scanner(s);
@@ -78,44 +77,29 @@ public class Test {
             String event = r.next();
             if (event.equals("addItem")) {
                 Item adaug = Store.getInstance().getItem(r.nextInt());
-                writer.println("Se adauga itemul " + adaug);
                 String where = r.next();
                 if (where.equals("ShoppingCart")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
-                    writer.println("In sc la clientul" + c);
                     c.shoppingCart.add(adaug);
-                    writer.println("SC lui " + c.name + " contine elementul " + adaug + " : " + c.shoppingCart.contains(adaug));
-                    writer.println("Pretul total din sc lui " + c.name + " este " + c.shoppingCart.getTotalPrice());
-                    writer.println("Bugetul clientului " + c.name + " este " + c.shoppingCart.buget);
                 } else if (where.equals("WishList")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
-                    writer.println("In wl la clientul" + c);
                     c.wishList.add(adaug);
-                    writer.println("WL lui " + c.name + " contine elementul " + adaug + " : " + c.wishList.contains(adaug));
-                    writer.println("Pretul total din wl lui " + c.name + " este " + c.wishList.getTotalPrice());
                 }
             } else if (event.equals("delItem")) {
                 Item sterg = Store.getInstance().getItem(r.nextInt());
-                writer.println("Se sterge itemul " + sterg);
                 String where = r.next();
                 if (where.equals("ShoppingCart")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     int ind = c.shoppingCart.indexOf(sterg);
-                    writer.println("Din sc de la clientul " + c);
-                    writer.println("indicele " + ind);
                     c.shoppingCart.remove(ind);
-                    writer.println("Bugetul clientului " + c.name + " este " + c.shoppingCart.buget);
                 } else if (where.equals("WishList")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     int ind = c.wishList.indexOf(sterg);
-                    writer.println("Din wl de la clientul " + c);
-                    writer.println("indicele " + ind);
                     c.wishList.remove(ind);
-                    writer.println("Pretul total din wl lui " + c.name + " este " + c.wishList.getTotalPrice());
                 }
             } else if (event.equals("addProduct")) {
                 writer.println("adaugare produs");
@@ -135,6 +119,11 @@ public class Test {
                 writer.println("get notif");
             }
             nr--;
+        }
+        for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
+            Customer aux = it.next();
+            writer.println("ShoppingCart-ul lui " + aux.name + ":\n" + aux.shoppingCart);
+            writer.println("WishList-ul lui " + aux.name + ":\n" + aux.wishList);
         }
         writer.close();
     }
