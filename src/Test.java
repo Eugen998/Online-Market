@@ -76,7 +76,12 @@ public class Test {
             r.useDelimiter(";");
             String event = r.next();
             if (event.equals("addItem")) {
-                Item adaug = Store.getInstance().getItem(r.nextInt());
+                Item search = Store.getInstance().getItem(r.nextInt());
+                Item adaug = new Item();
+                adaug.setId(search.getId());
+                adaug.setDepartment(search.getDepartment());
+                adaug.setPrice(search.getPrice());
+                adaug.setName(search.getName());
                 String where = r.next();
                 if (where.equals("ShoppingCart")) {
                     String n = r.next();
@@ -102,9 +107,39 @@ public class Test {
                     c.wishList.remove(ind);
                 }
             } else if (event.equals("addProduct")) {
-                writer.println("adaugare produs");
+                int depId = r.nextInt();
+                int itemId = r.nextInt();
+                double p = r.nextDouble();
+                String n = r.next();
+                Department d = Store.getInstance().getDepartment(depId);
+                Item adaug = new Item();
+                adaug.setName(n);
+                adaug.setId(itemId);
+                adaug.setDepartment(d.getName());
+                adaug.setPrice(p);
+                d.addItem(adaug);
+                //Notify observers!!!!
             } else if (event.equals("modifyProduct")) {
-                writer.println("modificare produs");
+                int depId = r.nextInt();
+                int itemId = r.nextInt();
+                double newPrice = r.nextDouble();
+                Item find = Store.getInstance().getItem(itemId);
+                Item mod = new Item();
+                mod.setPrice(newPrice);
+                mod.setDepartment(find.getDepartment());
+                mod.setId(find.getId());
+                mod.setName(find.getName());
+                for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
+                    Customer c = it.next();
+                    if (c.shoppingCart.contains(find)) {
+                        int index = c.shoppingCart.indexOf(find);
+                        double val = c.shoppingCart.buget + find.getPrice();
+                        if (val >= mod.getPrice()) {
+                            c.shoppingCart.remove(index);
+                            c.shoppingCart.add(mod);
+                        }
+                    }
+                }
             } else if (event.equals("delProduct")) {
                 writer.println("stergere produs");
             } else if (event.equals("getItem")) {
@@ -123,7 +158,11 @@ public class Test {
         for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
             Customer aux = it.next();
             writer.println("ShoppingCart-ul lui " + aux.name + ":\n" + aux.shoppingCart);
+            writer.println("Bugetul lui " + aux.name + " este " + aux.shoppingCart.buget);
             writer.println("WishList-ul lui " + aux.name + ":\n" + aux.wishList);
+        }
+        for (Iterator<Department> it = Store.getInstance().getDepartments().iterator(); it.hasNext(); ) {
+            writer.println(it.next().getItems());
         }
         writer.close();
     }

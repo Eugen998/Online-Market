@@ -89,7 +89,7 @@ public abstract class ItemList {
     public Item remove(int index) {
         if (isEmpty()) return null;
         else if (size == 1) {
-            if (index == 1) {
+            if (index == 0) {
                 Item aux = head.item;
                 head = null;
                 size--;
@@ -128,10 +128,14 @@ public abstract class ItemList {
     }
 
     public int indexOf(Item item) {
-        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
-            if (it.next() == item) return it.nextIndex();
+        int ret = 0;
+        Node<Item> aux = head;
+        while (item.getId() != aux.item.getId()) {
+            ret = ret + 1;
+            aux = aux.next;
+            if (aux == null) throw new NoSuchElementException();
         }
-        throw new NoSuchElementException();
+        return ret;
     }
 
     public int indexOf(Node<Item> node) {
@@ -156,7 +160,7 @@ public abstract class ItemList {
 
     public boolean contains(Item item) {
         for (ListIterator<Item> it = this.listIterator(); it.hasNext(); ) {
-            if (it.next() == item) return true;
+            if (it.next().getId() == item.getId()) return true;
         }
         return false;
     }
