@@ -217,12 +217,23 @@ public abstract class ItemList {
 
     }
 
+//    public String toString() {
+//        String s = "[ ";
+//        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+//            s = s + it.next();
+//        }
+//        s = s;
+//        return s;
+//    }
+
+
+    @Override
     public String toString() {
-        String s = "";
+        final StringJoiner s = new StringJoiner(", ", "[", "]");
         for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
-            s = s + it.next() + "\n";
+            s.add(it.next().toString());
         }
-        return s;
+        return s.toString();
     }
 
     public class ItemIterator implements ListIterator<Item> {

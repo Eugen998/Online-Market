@@ -16,7 +16,6 @@ public class Test {
         String s = sc.nextLine();
         int id;
         Store.getInstance().name = s;
-        writer.println("Am creat magazinul " + Store.getInstance().name);
         while (sc.hasNextLine()) {
             s = sc.nextLine();
             Scanner r = new Scanner(s);
@@ -34,7 +33,6 @@ public class Test {
             }
             s = sc.nextLine();
             int nr = Integer.parseInt(s);
-            writer.println(nr + " produse");
             while (nr > 0) {
                 s = sc.nextLine();
                 r = new Scanner(s);
@@ -47,13 +45,10 @@ public class Test {
                 Store.getInstance().getDepartment(id).addItem(a);
                 nr--;
             }
-            writer.println(Store.getInstance().getDepartment(id));
-            writer.println(Store.getInstance().getDepartment(id).getItems());
         }
         file = new File(s2);
         sc = new Scanner(file);
         int nr = Integer.parseInt(sc.nextLine());
-        writer.println(nr + " clienti");
         Scanner r;
         while (nr > 0) {
             s = sc.nextLine();
@@ -66,7 +61,6 @@ public class Test {
             Store.getInstance().enter(c);
             nr--;
         }
-        writer.println(Store.getInstance().getCustomers());
         file = new File(s3);
         sc = new Scanner(file);
         nr = Integer.parseInt(sc.nextLine());
@@ -137,32 +131,60 @@ public class Test {
                         if (val >= mod.getPrice()) {
                             c.shoppingCart.remove(index);
                             c.shoppingCart.add(mod);
+                        } else {
+                            c.shoppingCart.remove(index);
                         }
                     }
+                    if (c.wishList.contains(find)) {
+                        int index = c.wishList.indexOf(find);
+                        c.wishList.remove(index);
+                        c.wishList.add(mod);
+                    }
                 }
+                find.setPrice(newPrice);
+                //NOTIFY OBSERVERS!!!!
             } else if (event.equals("delProduct")) {
-                writer.println("stergere produs");
+                int delId = r.nextInt();
+                Item find = Store.getInstance().getItem(delId);
+                for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
+                    Customer c = it.next();
+                    if (c.shoppingCart.contains(find)) {
+                        int index = c.shoppingCart.indexOf(find);
+                        c.shoppingCart.remove(index);
+                    }
+                    if (c.wishList.contains(find)) {
+                        int index = c.wishList.indexOf(find);
+                        c.wishList.remove(index);
+                    }
+                }
+                Store.getInstance().delItem(find);
             } else if (event.equals("getItem")) {
-                writer.println(" strategie ");
+                writer.println(" strategia nu este implementata ");
+            } else if (event.equals("getItems")) {
+                String from = r.next();
+                String who = r.next();
+                Customer victim = Store.getInstance().getCustomer(who);
+                if (from.equals("ShoppingCart")) {
+                    writer.println(victim.shoppingCart);
+                } else writer.println(victim.wishList);
             } else if (event.equals("getTotal")) {
-                writer.println("produsele din lista clientului");
+                String from = r.next();
+                String who = r.next();
+                Customer victim = Store.getInstance().getCustomer(who);
+                if (from.equals("ShoppingCart")) {
+                    writer.println(victim.shoppingCart.getTotalPrice());
+                } else writer.println(victim.wishList.getTotalPrice());
+
             } else if (event.equals("accept")) {
                 writer.println("accept");
             } else if (event.equals("getObservers")) {
-                writer.println(" get observers ");
+                int depId = r.nextInt();
             } else if (event.equals("getNotifications")) {
-                writer.println("get notif");
+                String who = r.next();
+                Customer victim = Store.getInstance().getCustomer(who);
+                writer.println(victim.getNotifications());
             }
             nr--;
-        }
-        for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
-            Customer aux = it.next();
-            writer.println("ShoppingCart-ul lui " + aux.name + ":\n" + aux.shoppingCart);
-            writer.println("Bugetul lui " + aux.name + " este " + aux.shoppingCart.buget);
-            writer.println("WishList-ul lui " + aux.name + ":\n" + aux.wishList);
-        }
-        for (Iterator<Department> it = Store.getInstance().getDepartments().iterator(); it.hasNext(); ) {
-            writer.println(it.next().getItems());
         }
         writer.close();
     }

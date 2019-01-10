@@ -72,4 +72,11 @@ public class Store {
         return null;
     }
 
+    public void delItem(Item item) {
+        for (Iterator<Department> it = Store.getInstance().getDepartments().iterator(); it.hasNext(); ) {
+            Department aux = it.next();
+            if (aux.getItems().contains(item)) aux.getItems().remove(item);
+        }
+    }
+
 }
