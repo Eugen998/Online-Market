@@ -1,4 +1,3 @@
-import java.util.Iterator;
 
 public class BookDepartment extends Department {
     public BookDepartment(int id, String name) {

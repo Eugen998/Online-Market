@@ -1,9 +1,9 @@
 import java.util.Date;
-import java.util.StringJoiner;
 
 enum NotificationType {
     ADD, REMOVE, MODIFY;
 }
+
 public class Notification {
     public Date date;
     public NotificationType notificationType;

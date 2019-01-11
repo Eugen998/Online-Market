@@ -217,15 +217,6 @@ public abstract class ItemList {
 
     }
 
-//    public String toString() {
-//        String s = "[ ";
-//        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
-//            s = s + it.next();
-//        }
-//        s = s;
-//        return s;
-//    }
-
 
     @Override
     public String toString() {

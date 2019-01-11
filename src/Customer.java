@@ -5,7 +5,7 @@ public class Customer implements Observer {
     public String name;
     public ShoppingCart shoppingCart;
     public WishList wishList;
-    public Vector<Notification> notifications;
+    public Vector<Notification> notifications = new Vector<>();
 
     @Override
     public void update(Observable o, Object arg) {
@@ -22,5 +22,19 @@ public class Customer implements Observer {
             s.add(it.next().toString());
         }
         return s.toString();
+    }
+
+    public boolean checkIfObserver(Department department) {
+        for (ItemList.ItemIterator it = wishList.listIterator(); it.hasNext(); ) {
+            if (it.next().getDepartment().equals(department.getName())) return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfCustomer(Department department) {
+        for (ItemList.ItemIterator it = shoppingCart.listIterator(); it.hasNext(); ) {
+            if (it.next().getDepartment().equals(department.getName())) return true;
+        }
+        return false;
     }
 }

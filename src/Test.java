@@ -1,14 +1,13 @@
 import java.io.*;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.SplittableRandom;
+import java.util.*;
+
 
 public class Test {
     public static void main(String args[]) throws IOException {
-        String s1 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\store.txt";
-        String s2 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\customers.txt";
-        String s3 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\events.txt";
-        String s4 = "C:\\Users\\eugen\\Desktop\\JavaProjects\\TemaPOO\\test\\output.txt";
+        String s1 = "test/store.txt";
+        String s2 = "test/customers.txt";
+        String s3 = "test/events.txt";
+        String s4 = "test/output.txt";
         FileWriter f = new FileWriter(s4);
         PrintWriter writer = new PrintWriter(f);
         File file = new File(s1);
@@ -77,28 +76,34 @@ public class Test {
                 adaug.setPrice(search.getPrice());
                 adaug.setName(search.getName());
                 String where = r.next();
+                Department dest = Store.getInstance().findDepartment(search);
                 if (where.equals("ShoppingCart")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     c.shoppingCart.add(adaug);
+                    if (!dest.getCustomers().contains(c)) dest.enter(c);
                 } else if (where.equals("WishList")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     c.wishList.add(adaug);
+                    if (!dest.getObservers().contains(c)) dest.addObserver(c);
                 }
             } else if (event.equals("delItem")) {
                 Item sterg = Store.getInstance().getItem(r.nextInt());
+                Department d = Store.getInstance().findDepartment(sterg);
                 String where = r.next();
                 if (where.equals("ShoppingCart")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     int ind = c.shoppingCart.indexOf(sterg);
                     c.shoppingCart.remove(ind);
+                    if (c.checkIfCustomer(d) == false) d.getCustomers().remove(c);
                 } else if (where.equals("WishList")) {
                     String n = r.next();
                     Customer c = Store.getInstance().getCustomer(n);
                     int ind = c.wishList.indexOf(sterg);
                     c.wishList.remove(ind);
+                    if (c.checkIfObserver(d) == false) d.removeObserver(c);
                 }
             } else if (event.equals("addProduct")) {
                 int depId = r.nextInt();
@@ -112,17 +117,19 @@ public class Test {
                 adaug.setDepartment(d.getName());
                 adaug.setPrice(p);
                 d.addItem(adaug);
-                //Notify observers!!!!
+                d.notifyAllObservers(new Notification(new Date(), NotificationType.ADD, depId, itemId));
             } else if (event.equals("modifyProduct")) {
                 int depId = r.nextInt();
                 int itemId = r.nextInt();
                 double newPrice = r.nextDouble();
+                Department d = Store.getInstance().getDepartment(depId);
                 Item find = Store.getInstance().getItem(itemId);
                 Item mod = new Item();
                 mod.setPrice(newPrice);
                 mod.setDepartment(find.getDepartment());
                 mod.setId(find.getId());
                 mod.setName(find.getName());
+                d.notifyAllObservers(new Notification(new Date(), NotificationType.MODIFY, depId, itemId));
                 for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
                     Customer c = it.next();
                     if (c.shoppingCart.contains(find)) {
@@ -133,6 +140,7 @@ public class Test {
                             c.shoppingCart.add(mod);
                         } else {
                             c.shoppingCart.remove(index);
+                            if (c.checkIfCustomer(d) == false) d.getCustomers().remove(c);
                         }
                     }
                     if (c.wishList.contains(find)) {
@@ -142,19 +150,22 @@ public class Test {
                     }
                 }
                 find.setPrice(newPrice);
-                //NOTIFY OBSERVERS!!!!
             } else if (event.equals("delProduct")) {
                 int delId = r.nextInt();
                 Item find = Store.getInstance().getItem(delId);
+                Department d = Store.getInstance().findDepartment(find);
+                d.notifyAllObservers(new Notification(new Date(), NotificationType.REMOVE, d.getId(), delId));
                 for (Iterator<Customer> it = Store.getInstance().getCustomers().iterator(); it.hasNext(); ) {
                     Customer c = it.next();
                     if (c.shoppingCart.contains(find)) {
                         int index = c.shoppingCart.indexOf(find);
                         c.shoppingCart.remove(index);
+                        if (c.checkIfCustomer(d) == false) d.getCustomers().remove(c);
                     }
                     if (c.wishList.contains(find)) {
                         int index = c.wishList.indexOf(find);
                         c.wishList.remove(index);
+                        if (c.checkIfObserver(d) == false) d.removeObserver(c);
                     }
                 }
                 Store.getInstance().delItem(find);
@@ -176,9 +187,15 @@ public class Test {
                 } else writer.println(victim.wishList.getTotalPrice());
 
             } else if (event.equals("accept")) {
-                writer.println("accept");
+                int depId = r.nextInt();
+                String who = r.next();
+                Customer c = Store.getInstance().getCustomer(who);
+                Department d = Store.getInstance().getDepartment(depId);
+                d.accept(c.shoppingCart);
+                writer.println(c.shoppingCart.buget);
             } else if (event.equals("getObservers")) {
                 int depId = r.nextInt();
+                writer.println(Store.getInstance().getDepartment(depId).getObservers());
             } else if (event.equals("getNotifications")) {
                 String who = r.next();
                 Customer victim = Store.getInstance().getCustomer(who);

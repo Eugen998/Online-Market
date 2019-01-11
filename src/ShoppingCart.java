@@ -46,19 +46,21 @@ public class ShoppingCart extends ItemList implements Visitor {
     }
 
     public void visit(BookDepartment bookDepartment) {
-        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-            if (it.next().getDepartment().equals("book")) {
-                double newPrice = (0.9) * it.next().getPrice();
-                it.next().setPrice(newPrice);
+        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+            Item aux = it.next();
+            if (aux.getDepartment().equals("BookDepartment")) {
+                double newPrice = (0.9) * aux.getPrice();
+                aux.setPrice(newPrice);
             }
         }
     }
 
     public void visit(MusicDepartment musicDepartment) {
         double s = 0;
-        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-            if (it.next().getDepartment().equals("music")) {
-                s = s + it.next().getPrice();
+        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+            Item aux = it.next();
+            if (aux.getDepartment().equals("MusicDepartment")) {
+                s = s + aux.getPrice();
             }
         }
         buget = buget + (0.1) * s;
@@ -66,42 +68,38 @@ public class ShoppingCart extends ItemList implements Visitor {
 
     public void visit(SoftwareDepartment softwareDepartment) {
         double newPrice;
-        double min = getItem(0).getPrice();
-        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-            if (it.next().getPrice() < min) min = it.next().getPrice();
-        }
+        double min = softwareDepartment.getCheapest().getPrice();
         if (buget < min) {
             for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-                if (it.next().getDepartment().equals("software")) {
-                    newPrice = (0.8) * it.next().getPrice();
-                    it.next().setPrice(newPrice);
+                Item aux = it.next();
+                if (aux.getDepartment().equals("SoftwareDepartment")) {
+                    newPrice = (0.8) * aux.getPrice();
+                    aux.setPrice(newPrice);
                 }
             }
         }
     }
 
     public void visit(VideoDepartment videoDepartment) {
-        double max = 0;
+        double max = videoDepartment.getMostExpensive().getPrice();
         double s = 0;
         double newPrice;
-        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-            if (it.next().getPrice() > max) max = it.next().getPrice();
-        }
-        for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-            if (it.next().getDepartment().equals("video")) {
-                s = s + it.next().getPrice();
+        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+            Item aux = it.next();
+            if (aux.getDepartment().equals("VideoDepartment")) {
+                s = s + aux.getPrice();
             }
         }
         buget = buget + (0.05) * s;
         if (s > max) {
-            for (Iterator<Item> it = this.listIterator(); it.hasNext(); ) {
-                if (it.next().getDepartment().equals("video")) {
-                    newPrice = (0.85) * it.next().getPrice();
-                    it.next().setPrice(newPrice);
+            for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+                Item aux = it.next();
+                if (aux.getDepartment().equals("VideoDepartment")) {
+                    newPrice = (0.85) * aux.getPrice();
+                    aux.setPrice(newPrice);
                 }
             }
         }
-
     }
 
 

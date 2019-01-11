@@ -1,5 +1,6 @@
 import java.util.Currency;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 public class Store {
@@ -77,6 +78,17 @@ public class Store {
             Department aux = it.next();
             if (aux.getItems().contains(item)) aux.getItems().remove(item);
         }
+    }
+
+    public Department findDepartment(Item item) {
+        for (Iterator<Department> it = departments.iterator(); it.hasNext(); ) {
+            Department dep = it.next();
+            for (Iterator<Item> it2 = dep.getItems().iterator(); it2.hasNext(); ) {
+                Item itm = it2.next();
+                if (itm.getId() == item.getId()) return dep;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
 }

@@ -1,9 +1,9 @@
 public interface Visitor {
-    public void visit(BookDepartment bookDepartment);
+    void visit(BookDepartment bookDepartment);
 
-    public void visit(MusicDepartment musicDepartment);
+    void visit(MusicDepartment musicDepartment);
 
-    public void visit(SoftwareDepartment softwareDepartment);
+    void visit(SoftwareDepartment softwareDepartment);
 
-    public void visit(VideoDepartment videoDepartment);
+    void visit(VideoDepartment videoDepartment);
 }
