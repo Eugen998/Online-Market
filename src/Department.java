@@ -73,7 +73,7 @@ abstract public class Department implements Subject {
 
     public void notifyAllObservers(Notification notification) {
         for (Iterator<Customer> it = observers.iterator(); it.hasNext(); ) {
-            it.next().notifications.add(notification);
+            it.next().update(notification);
         }
     }
 

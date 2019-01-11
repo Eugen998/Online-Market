@@ -184,6 +184,15 @@ public abstract class ItemList {
         return a;
     }
 
+    @Override
+    public String toString() {
+        final StringJoiner s = new StringJoiner(", ", "[", "]");
+        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
+            s.add(it.next().toString());
+        }
+        return s.toString();
+    }
+
     public static class Node<Item> {
         public Item item;
         public Node<Item> next;
@@ -215,16 +224,6 @@ public abstract class ItemList {
             this.prev = prev;
         }
 
-    }
-
-
-    @Override
-    public String toString() {
-        final StringJoiner s = new StringJoiner(", ", "[", "]");
-        for (ItemIterator it = this.listIterator(); it.hasNext(); ) {
-            s.add(it.next().toString());
-        }
-        return s.toString();
     }
 
     public class ItemIterator implements ListIterator<Item> {

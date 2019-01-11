@@ -8,8 +8,8 @@ public class Customer implements Observer {
     public Vector<Notification> notifications = new Vector<>();
 
     @Override
-    public void update(Observable o, Object arg) {
-
+    public void update(Notification notification) {
+        notifications.add(notification);
     }
 
     public String toString() {
